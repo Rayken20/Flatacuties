@@ -10,8 +10,21 @@
     <header>
         <h1> Vote for the Cutest Animal</h1>
     </header>
-
+    <div>
     <main id="characterList"></main>
-    <script src="app.js"></script>
+  </div>
+
+  <div id="votingForm" class="voting-form">
+    <img id="selectedCharacterImage"
+     src="" alt="Selected Character">
+    <form id="voteForm">
+        <label for="voteCount">Enter Your Votes:</label>
+        <input type="number" id="voteCount" name="voteCount" min="0" value="0">
+        <button type="button" id="voteButton">Vote</button>
+        <button type="button" id="resetButton">Reset Votes</button>
+    </form>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>

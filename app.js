@@ -34,4 +34,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return card;
     }
+
+
+function handleVote(characterId) {
+    // Perform actions to submit the vote, update UI, etc.
+    // Update the vote count on the server (you need to implement this logic)
+    console.log(`Voting for character with ID ${characterId}`);
+
+    // For demonstration purposes, let's assume an API endpoint to update votes
+    fetch(`http://localhost:3000/characters/${characterId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            votes: 1, // Increment the votes (adjust as needed)
+        }),
+    })
+    .then(response => response.json())
+    .then(updatedCharacter => {
+        // Update the displayed vote count on the UI
+        const characterCard = document.querySelector(`.character-card[data-id="${characterId}"]`);
+        const votesElement = characterCard.querySelector('p');
+        votesElement.textContent = `Votes: ${updatedCharacter.votes}`;
+    })
+    .catch(error => console.error('Error updating votes:', error));
+}
 });
