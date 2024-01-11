@@ -1,3 +1,5 @@
+// Code inside this block will run when the DOM is fully loaded
+    // async/await is used to handle asynchronous tasks more effectively
 document.addEventListener('DOMContentLoaded', () => {
     const characterList = document.getElementById('characterList');
 
@@ -13,10 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Error fetching data:', error));
 
+    // Event listener for voting
+    document.getElementById('voteButton').addEventListener('click', () => {
+        const voteCount = document.getElementById('voteCount').value;
+        const selectedCharacterId = document.getElementById('selectedCharacterImage').getAttribute('data-id');
+        handleVote(selectedCharacterId, voteCount);
+    });
+
+    // Event listener for resetting votes
+    document.getElementById('resetButton').addEventListener('click', () => {
+        resetVotes();
+    });
+
     // Function to create a character card
     function createCharacterCard(character) {
         const card = document.createElement('div');
         card.classList.add('character-card');
+        card.setAttribute('data-id', character.id);
 
         const image = document.createElement('img');
         image.src = character.image;
@@ -32,32 +47,27 @@ document.addEventListener('DOMContentLoaded', () => {
         card.appendChild(name);
         card.appendChild(votes);
 
+        // Add event listener to the character card for voting
+        card.addEventListener('click', () => {
+            // Update the selected character image
+            document.getElementById('selectedCharacterImage').src = character.image;
+            document.getElementById('selectedCharacterImage').setAttribute('data-id', character.id);
+        });
+
         return card;
     }
 
+    // Function to handle voting
+    function handleVote(characterId, voteCount) {
+        // Perform actions to submit the vote, update UI, etc.
+        console.log(`Voting for character with ID ${characterId} and ${voteCount} votes`);
+        
+    }
 
-function handleVote(characterId) {
-    // Perform actions to submit the vote, update UI, etc.
-    // Update the vote count on the server (you need to implement this logic)
-    console.log(`Voting for character with ID ${characterId}`);
-
-    // For demonstration purposes, let's assume an API endpoint to update votes
-    fetch(`http://localhost:3000/characters/${characterId}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            votes: 1, // Increment the votes (adjust as needed)
-        }),
-    })
-    .then(response => response.json())
-    .then(updatedCharacter => {
-        // Update the displayed vote count on the UI
-        const characterCard = document.querySelector(`.character-card[data-id="${characterId}"]`);
-        const votesElement = characterCard.querySelector('p');
-        votesElement.textContent = `Votes: ${updatedCharacter.votes}`;
-    })
-    .catch(error => console.error('Error updating votes:', error));
-}
-});
+    // Function to reset votes
+    function resetVotes() {
+        // Add logic to reset votes
+        console.log('Votes reset');
+    }
+    
+   })
