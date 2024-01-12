@@ -1,8 +1,6 @@
-
 body {
     font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 20px;
 }
 
 header {
@@ -12,24 +10,66 @@ header {
     padding: 20px;
 }
 
-.flex-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content:space-evenly;
+#animalList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#animalList li {
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+#animalList li:hover {
+    background-color: #d0d0d0;
+}
+
+#animalDetails {
+    margin-top: 20px;
+}
+
+h2 {
+    color: #333;
 }
 
 img {
-    max-width: 30%;
-    border-radius: 30%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-h1{
-
+p {
+    margin: 0;
 }
-#form{
 
+form {
+    margin-top: 10px;
 }
-input{
-  display: block;
-  border:border radius;
+
+label {
+    margin-right: 10px;
+}
+
+input {
+    width: 50px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #24a1a5;
 }
