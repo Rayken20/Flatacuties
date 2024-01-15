@@ -1,36 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
+<html>
+  <head>
     <title>Flatacuties</title>
-</head>
-
-<body>
-    <header>
-        <h1>Flatacuties</h1>
-    </header>
-    <div class="container">
-        <div id="animalListContainer">
-            <h1>Animal List</h1>
-            <ul id="animalList"></ul>
-        </div>
-        <div id="animalDetailsContainer">
-            <h1>Animal Details</h1>
-            <!-- The form for voting -->
-            <form id="voteForm">
-                <label for="voteCount">Votes:</label>
-                <input type="number" id="voteCount" name="voteCount" readonly>
-                <button type="button" id="voteButton">Vote</button>
-                <button type="button" id="resetButton">Reset Votes</button>
-            </form>
-            <div id="animalDetails"></div>
-        </div>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+  </head>
+  <body>
+    <div class="logo">
+      <h1>Flatacuties</h1>
     </div>
 
-    <script src="app.js"></script>
-</body>
+    <div id="character-bar">
+      <!-- show characters names here -->
+    </div>
 
+    <div class="characterInfo">
+      <div id="detailed-info">
+        <p id="name">Character's Name</p>
+        <img
+          id="image"
+          src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGN1dGUlMjBhbmltYWx8ZW58MHx8MHx8fDA%3D"
+          alt="Character's Name"
+        /><!-- display character image here -->
+        <h4>Total Votes: <span id="vote-count">Character's Votes</span></h4>
+        <form id="votes-form">
+          <input type="text" placeholder="Enter Votes" id="votes" name="votes" />
+          <input type="submit" value="Add Votes" />
+        </form>
+        <button id="reset-btn">Reset Votes</button>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
 </html>

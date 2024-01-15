@@ -1,118 +1,100 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const animalListContainer = document.getElementById('animalList');
-    const animalDetailsContainer = document.getElementById('animalDetails');
 
-    // Fetch data from the local server
-    fetch('http://localhost:3000/characters')
-        .then(response => response.json())
-        .then(data => {
-            // Call function to display the list of animals
-            displayAnimalList(data);
-        });
+const flatURL = "http://localhost:3000";
+// Global Variables
+const characterBarDiv = document.getElementById('character-bar');
+const characterInfoDiv = document.getElementById('detailed-info');
 
-    // Function to display the list of animals
-    function displayAnimalList(animals) {
-        // Loop through the animals and create list items
-        animals.forEach(animal => {
-            const listItem = document.createElement('li');
-            listItem.textContent = animal.name;
+// Animal Information
+const characterInfoImage = document.getElementById('image');
+const characterInfoName = document.getElementById('name');
+const characterInfoVotes = document.getElementById('vote-count');
 
-            // Add click event listener to each list item
-            listItem.addEventListener('click', function () {
-                // Call function to display the details of the selected animal
-                displayAnimalDetails(animal);
-            });
+// Functions to Run First
 
-            // Append the list item to the container
-            animalListContainer.appendChild(listItem);
-        });
+const fetchGifs = () => {
+    fetch(flatURL + "/characters")
+    .then((response) => response.json())
+    .then((characterArr) => {
+        displayCharacters(characterArr);
+    })
+}
+
+const displayCharacters = (characterArr) => {
+    characterArr.forEach((characterObj) => {
+        generateSpan(characterObj);
+    })
+}
+
+const generateSpan = (characterObj) => {
+    const characterSpan = document.createElement('span');
+    characterSpan.name = characterObj.name;
+    characterSpan.textContent = characterObj.name;
+    characterSpan.votes = characterObj.votes;
+    characterSpan.src = characterObj.image;
+    characterSpan.image = characterObj.image;
+    characterSpan.id = `character${characterObj.id}`;
+    characterBarDiv.appendChild(characterSpan);
+    clickSpanForDetails(characterSpan);
+    firstSpan(characterSpan);
+}
+
+const clickSpanForDetails = (characterSpan) => {
+    characterSpan.addEventListener('click', (event) => {
+        mainCharacterDisplay(event.target);
+    })
+}
+
+const firstSpan = (characterSpan) => {
+    if (characterSpan.id === "character1"){
+        mainCharacterDisplay(characterSpan);
     }
+}
 
-    // Function to display the details of the selected animal
-    function displayAnimalDetails(animal) {
-        // Clear previous details
-        animalDetailsContainer.innerHTML = '';
+const mainCharacterDisplay = (character) => {
+    characterInfoImage.src = character.src;
+    characterInfoName.textContent = character.textContent;
+    characterInfoVotes.textContent = character.votes;
+}
 
-        // Create elements to display the details
-        const animalName = document.createElement('h2');
-        animalName.textContent = animal.name;
+// Additional Functions
 
-        const animalImage = document.createElement('img');
-        animalImage.src = animal.image;
-        animalImage.alt = animal.name;
+const createCharacter = () => {
+    const newCharForm = document.getElementById('character-form');
+ newCharForm.AddEventListener('submit', (event) => {
+        const newCharacter = {
+            name: event.target.name.value,
+            image: event.target["image-url"].value,
+            src: event.target["image-url"].value,
+            votes: 0
+        }
+        generateSpan(newCharacter);
+        mainCharacterDisplay(newCharacter);
+        event.preventDefault();
+        newCharForm.reset();
+    })
+}
 
-        const votesLabel = document.createElement('p');
-        votesLabel.textContent = 'Votes: ';
+const submitVotesForm = () => {
+    const votesForm = document.getElementById('votes-form');
+    votesForm.addEventListener('submit', (event) => {
+        const prevVotes = Number(characterInfoVotes.textContent);
+        const newVotes = Number(votesForm.votes.value);
+        const totalVotes = prevVotes + newVotes;
+        characterInfoVotes.textContent = Number(totalVotes);
+        event.preventDefault();
+        votesForm.reset();
+    })
+}
 
-        const votesCount = document.createElement('span');
-        votesCount.textContent = animal.votes;
+const resetVotes = () => {
+    const resetBtn = document.getElementById("reset-btn");
+    resetBtn.addEventListener('click', () => {
+        characterInfoVotes.textContent = 0;
+    })
+}
 
-        // Input field for voting
-        const voteInput = document.createElement('input');
-        voteInput.type = 'number';
-        voteInput.id = 'voteCount';
-        voteInput.name = 'voteCount';
-        voteInput.value = animal.votes;
-
-        // Button to vote
-        const voteButton = document.createElement('button');
-        voteButton.textContent = 'Vote';
-        voteButton.addEventListener('click', function () {
-            // Call function to handle the vote submission
-            submitVote(animal.id, voteInput);
-        });
-
-        // Button to reset votes
-        const resetButton = document.createElement('button');
-        resetButton.textContent = 'Reset Votes';
-        resetButton.addEventListener('click', function () {
-            // Call function to reset votes
-            resetVotes(animal.id, voteInput);
-        });
-
-        // Append elements to the container
-        animalDetailsContainer.appendChild(animalName);
-        animalDetailsContainer.appendChild(animalImage);
-        animalDetailsContainer.appendChild(votesLabel);
-        animalDetailsContainer.appendChild(votesCount);
-        animalDetailsContainer.appendChild(voteInput);
-        animalDetailsContainer.appendChild(voteButton);
-        animalDetailsContainer.appendChild(resetButton);
-    }
-
-    // Function to handle vote submission
-    function submitVote(animalId, voteInput) {
-        const newVotes = parseInt(voteInput.value) + 1;
-
-        // Update the server with the new votes count
-        updateVotes(animalId, newVotes, voteInput);
-    }
-
-    // Function to reset votes
-    function resetVotes(animalId, voteInput) {
-        const resetVotes = 0;
-
-        // Update the server with the new votes count
-        updateVotes(animalId, resetVotes, voteInput);
-    }
-
-    // Function to update votes on the server
-    function updateVotes(animalId, newVotes, voteInput) {
-        fetch(`http://localhost:3000/characters/${animalId}`, {
-            method: 'PUT', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ votes: newVotes }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Update the displayed votes count
-                voteInput.value = data.votes;
-                displayAnimalDetails(data); // Refresh the details to update votes count
-            })
-            .catch(error => {
-                console.error('Error updating votes:', error);
-            });
-    }
-});
+document.addEventListener('DOMContentLoaded', () => {
+    fetchGifs();  
+    submitVotesForm();
+    resetVotes();
+})
